@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="styles/table-converter.css">
     
     <script src="js/jquery/jquery-1.10.2.js"></script>
+    <script src="js/html2canvas/html2canvas.js"></script>
 
     <script src="table-converter.js"></script> 
     
@@ -23,10 +24,54 @@
     <br>
     <button id="convertButton">Convert!</button>
     <br>
-    <textarea id ="tableInputArea">title here		
-Test    Val Val
-ga	3	4
-ga	4	5</textarea>
+    <textarea id ="tableInputArea">Table 1. Civilian labor force and unemployment by census region and division, seasonally adjusted (1)
+
+(Numbers in thousands)
+                                                                                                                               
+                                                                                                                                
+                                                                                                                                
+                                                                                        Unemployed                              
+                                                                                                                                
+                             Civilian labor force                                                                               
+ Census region and                                                                                                              
+      division                                                          Number                      Percent of labor force      
+                                                                                                                                
+                                                                                                                                
+                       Oct.     Aug.     Sept.    Oct.     Oct.     Aug.     Sept.    Oct.     Oct.     Aug.     Sept.    Oct.  
+                       2014     2015     2015     2015     2014     2015     2015     2015     2014     2015     2015     2015  
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+Northeast........... 28,253.7 28,442.1 28,372.6 28,364.2  1,637.6  1,445.2  1,419.5  1,391.7    5.8      5.1      5.0      4.9  
+                                                                                                                                
+  New England.......  7,810.4  7,849.2  7,808.3  7,780.9    438.6    363.0    357.0    357.3    5.6      4.6      4.6      4.6  
+  Middle Atlantic... 20,443.3 20,592.9 20,564.3 20,583.3  1,199.0  1,082.2  1,062.5  1,034.4    5.9      5.3      5.2      5.0  
+                                                                                                                                
+South............... 57,058.0 57,154.6 57,084.6 57,133.8  3,276.8  2,923.5  2,895.7  2,906.5    5.7      5.1      5.1      5.1  
+                                                                                                                                
+  South Atlantic.... 30,263.0 30,291.7 30,286.1 30,342.3  1,804.0  1,627.1  1,600.7  1,593.3    6.0      5.4      5.3      5.3  
+  East South Central  8,344.3  8,467.7  8,433.6  8,423.8    541.7    485.2    479.0    470.2    6.5      5.7      5.7      5.6  
+  West South Central 18,450.7 18,395.2 18,364.9 18,367.7    931.1    811.3    816.0    842.9    5.0      4.4      4.4      4.6  
+                                                                                                                                
+Midwest............. 34,508.4 34,452.7 34,439.3 34,503.9  1,878.1  1,598.4  1,562.4  1,563.8    5.4      4.6      4.5      4.5  
+                                                                                                                                
+  East North Central 23,354.9 23,322.9 23,313.2 23,345.8  1,394.4  1,136.1  1,114.6  1,122.2    6.0      4.9      4.8      4.8  
+  West North Central 11,153.5 11,129.8 11,126.1 11,158.1    483.7    462.2    447.9    441.6    4.3      4.2      4.0      4.0  
+                                                                                                                                
+West................ 36,673.2 36,985.0 36,932.4 36,916.3  2,376.0  2,090.3  2,051.0  2,016.2    6.5      5.7      5.6      5.5  
+                                                                                                                                
+  Mountain.......... 11,291.3 11,418.7 11,409.7 11,406.1    615.9    585.7    584.9    577.8    5.5      5.1      5.1      5.1  
+  Pacific........... 25,381.8 25,566.3 25,522.7 25,510.2  1,760.1  1,504.6  1,466.0  1,438.5    6.9      5.9      5.7      5.6  
+
+   1 Census region estimates are derived by summing the census division model-based estimates.
+   NOTE: Data refer to place of residence. The states (including the District of Columbia) that compose the various census
+divisions are: New England: Connecticut, Maine, Massachusetts, New Hampshire, Rhode Island, and Vermont; Middle Atlantic: New
+Jersey, New York, and Pennsylvania; South Atlantic: Delaware, District of Columbia, Florida, Georgia, Maryland, North Carolina,
+South Carolina, Virginia, and West Virginia; East South Central: Alabama, Kentucky, Mississippi, and Tennessee; West South
+Central: Arkansas, Louisiana, Oklahoma, and Texas; East North Central: Illinois, Indiana, Michigan, Ohio, and Wisconsin; West
+North Central: Iowa, Kansas, Minnesota, Missouri, Nebraska, North Dakota, and South Dakota; Mountain: Arizona, Colorado, Idaho,
+Montana, Nevada, New Mexico, Utah, and Wyoming; and Pacific: Alaska, California, Hawaii, Oregon, and Washington. Estimates for
+the current year are subject to revision early in the following calendar year.</textarea>
     <br>
     
     <h3>Result table: </h3>
@@ -40,7 +85,8 @@ ga	4	5</textarea>
         <div class="modifyButton" id="decreaseIndentButton" title="Decrease cell indent"></div>
         <div class="modifyButton" id="moveRowsButton" title="Move rows to table header / table body"></div>
         <div class="modifyButton" id="editTextButton" title="Edit text">T</div>
-        <div class="modifyButton disabled" id="undoButton" title="Undo"></div>
+        <div class="modifyButton disabled" id="undoButton" title="Undo (Ctrl-Z)"></div>
+        <div class="modifyButton disabled" id="makeImageOfTableButton" title="Make image of table"></div>
         
         <div class="clearFloat"></div>
     </div>
@@ -55,8 +101,23 @@ ga	4	5</textarea>
     
     </textarea>
 
-    
-    
+
+    <div id="fullScreenPopUpBox">
+        <div class= "closePopUpBoxButton">X</div>
+        <div id="tableImageDiv"></div>
+    </div>   
+
+    <div id="plainTableLinks">
+    <p>Links to BLS plain tables:</p>
+        <ul>
+        <li><a href="http://www.bls.gov/news.release/eci.toc.htm">http://www.bls.gov/news.release/eci.toc.htm</a></li>
+        <li><a href="http://www.bls.gov/news.release/prod2.toc.htm">http://www.bls.gov/news.release/prod2.toc.htm</a></li>
+        <li><a href="http://www.bls.gov/news.release/mmls.toc.htm">http://www.bls.gov/news.release/mmls.toc.htm</a></li>
+        <li><a href="http://www.bls.gov/news.release/metro.toc.htm">http://www.bls.gov/news.release/metro.toc.htm</a></li>
+        <li><a href="http://www.bls.gov/news.release/laus.toc.htm">http://www.bls.gov/news.release/laus.toc.htm</a></li>
+        </ul>
+    </div>
+
 
 </body>
 </html>
