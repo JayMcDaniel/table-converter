@@ -361,10 +361,6 @@
             }
 
 
-            if (thisText.match(/\-{4,}/)) { //if this is a standalone cell with just "----", remove it
-                $(thisTD).remove();
-            }
-
             //replace # fillers with sub classes
             var matchedPoundSigns = /^#+/.exec(thisText);
 
@@ -374,8 +370,7 @@
             thisSubClass = "sub" + subNum;
 
 
-            thisTD.html(thisText.replace(matchedPoundSigns, "").replace(/\.+$/, "")); //remove pound signs and extra periods at end
-
+            thisTD.html(thisText.replace(/\-{3,}/g,"").replace(matchedPoundSigns, "").replace(/\.+$/, "")); //remove pound signs and extra periods at end
 
             thisTD.wrapInner("<p class='" + thisSubClass + "'></p>").changeElementType("th", true); //change leftmost cells to TH P
 
