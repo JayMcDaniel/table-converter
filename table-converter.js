@@ -158,20 +158,13 @@
     function KeyPress(e) {
         var evtobj = window.event ? event : e
         if ((evtobj.keyCode == 90 && evtobj.ctrlKey) || evtobj.metaKey && evtobj.keyCode == 90) { //ctrl or cmd z
+            e.preventDefault();
             undo();
+            
         };
 
 
     }
-
-
-    $(window).keydown(function(e) {
-        if (e.keyCode >= 65 && e.keyCode <= 90) {
-            var char = (e.metaKey ? '⌘-' : '') + String.fromCharCode(e.keyCode)
-            $('#keydown').append('<kbd>' + char + '</kbd>')
-        }
-    })
-
 
     document.onkeydown = KeyPress;
 
